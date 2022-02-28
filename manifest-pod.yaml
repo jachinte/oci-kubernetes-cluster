@@ -1,0 +1,61 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: oci-fss
+provisioner: oracle.com/oci-fss
+parameters:
+  # Insert mount target from the FSS here
+  mntTargetId: ocid1.mounttarget.oc1.sa_santiago_1.aaaaaa4np2syr4lbonrwyllqojxwiottmewxgylooruwcz3pfuys2ylefuyqaaaa
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: oke-fsspv
+spec:
+ storageClassName: oci-fss
+ capacity:
+  storage: 45Gi
+ accessModes:
+  - ReadWriteMany
+ mountOptions:
+  - nosuid
+ nfs:
+# Replace this with the IP of your FSS file system in OCI
+  server: 10.0.3.10
+# Replace this with the Path of your FSS file system in OCI
+  path: "/sharedfs"
+  readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: oke-fsspvc
+spec:
+ storageClassName: oci-fss
+ accessModes:
+ - ReadWriteMany
+ resources:
+  requests:
+ # Although storage is provided here it is not used for FSS file systems
+    storage: 1Gi
+ volumeName: oke-fsspv
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: oke-fsspod
+spec:
+  containers:
+  - name: web
+    image: nginx
+    volumeMounts:
+     - name: nfs
+       mountPath: "/usr/share/nginx/html/"
+    ports:
+      - containerPort: 80
+        name: http
+  volumes:
+  - name: nfs
+    persistentVolumeClaim:
+      claimName: oke-fsspvc
+      readOnly: false
