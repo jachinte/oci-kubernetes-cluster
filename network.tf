@@ -40,7 +40,7 @@ resource "oci_core_security_list" "FoggyKitchenOKESecurityList" {
 
   // Ingress and egress rules for file system storage
   egress_security_rules {
-    destination = var.VCN-CIDR
+    destination = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol    = "06"
     tcp_options {
       source_port_range {
@@ -51,7 +51,7 @@ resource "oci_core_security_list" "FoggyKitchenOKESecurityList" {
   }
 
   egress_security_rules {
-    destination = var.VCN-CIDR
+    destination = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol    = "17"
     udp_options {
       source_port_range {
@@ -62,7 +62,7 @@ resource "oci_core_security_list" "FoggyKitchenOKESecurityList" {
   }
 
   egress_security_rules {
-    destination = var.VCN-CIDR
+    destination = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol    = "06"
     tcp_options {
       source_port_range {
@@ -73,46 +73,38 @@ resource "oci_core_security_list" "FoggyKitchenOKESecurityList" {
   }
 
   ingress_security_rules {
-    source   = var.VCN-CIDR
+    source   = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol = "06"
     tcp_options {
-      source_port_range {
-        min = 111
-        max = 111
-      }
+      min = 111
+      max = 111
     }
   }
 
   ingress_security_rules {
-    source   = var.VCN-CIDR
+    source   = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol = "17"
     udp_options {
-      source_port_range {
-        min = 111
-        max = 111
-      }
+      min = 111
+      max = 111
     }
   }
 
   ingress_security_rules {
-    source   = var.VCN-CIDR
+    source   = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol = "06"
     tcp_options {
-      source_port_range {
-        min = 2048
-        max = 2050
-      }
+      min = 2048
+      max = 2050
     }
   }
 
   ingress_security_rules {
-    source   = var.VCN-CIDR
+    source   = var.FoggyKitchenNodePoolSubnet-CIDR
     protocol = "17"
     udp_options {
-      source_port_range {
-        min = 2048
-        max = 2048
-      }
+      min = 2048
+      max = 2048
     }
   }
 }
